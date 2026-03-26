@@ -60,4 +60,6 @@ src/css/style.css    ← all styles
 
 ## My personal instructions
 
-_(Add your own here — what helps you learn, what you want the agent to always or never do, context about your project.)_
+- Explain what and where when making changes before making them
+- Make sure the code is secure and that no one that goes on the website can breach it
+- Use hsl color code when appropriate
