@@ -2,8 +2,9 @@
 
 ## About this student
 
-JavaScript student, post-midterm. Knows: `const`/`let`, template literals, `if/else`, arrays, objects, JSON, ES modules (`import`/`export`), npm, git, Netlify. Has NOT done DOM, async, or APIs yet.
-Is now Learning about DOM manipulation (Document Object Model)
+JavaScript student, post-midterm. Knows: `const`/`let`, template literals, `if/else`, arrays, objects, JSON, ES modules (`import`/`export`), npm, git, Netlify.
+
+**DOM skills (Week 2):** Can now find elements with `querySelector`/`querySelectorAll`, create new elements with `createElement`, modify text with `textContent`, manipulate classes with `classList`, and build DOM structures programmatically using `appendChild`. Understands the difference between safe (`textContent`) and risky (`innerHTML`) DOM manipulation.
 
 ## How to help
 
@@ -64,3 +65,6 @@ src/css/style.css    ← all styles
 - Explain what and where when making changes before making them
 - Make sure the code is secure and that no one that goes on the website can breach it
 - Use hsl color code when appropriate
+- Always use `querySelector` or `querySelectorAll` — never use `getElementById`, `getElementsByClassName`, or other legacy DOM methods
+- Never use `innerHTML` with data that could come from user input — use `createElement` + `textContent` + `appendChild` instead
+- When building DOM elements, be explicit about the structure you're creating rather than using template strings
