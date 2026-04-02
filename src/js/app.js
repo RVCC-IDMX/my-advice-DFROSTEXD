@@ -7,8 +7,8 @@ import { mediaData } from './data.js';
 import { meetsAllCriteria, getRatingDisplay } from './matching.js';
 
 // Get form and results container
-const form = document.getElementById('preferences-form');
-const resultsContainer = document.getElementById('results-container');
+const form = document.querySelector('#preferences-form');
+const resultsContainer = document.querySelector('#results-container');
 
 /**
  * Handle form submission
@@ -18,9 +18,9 @@ function handleFormSubmit(event) {
   event.preventDefault();
 
   // Collect user preferences from form
-  const genreSelect = document.getElementById('genre-select');
-  const lengthSelect = document.getElementById('length-select');
-  const ratingSelect = document.getElementById('rating-select');
+  const genreSelect = document.querySelector('#genre-select');
+  const lengthSelect = document.querySelector('#length-select');
+  const ratingSelect = document.querySelector('#rating-select');
 
   const preferences = {
     genre: genreSelect.value,
@@ -76,23 +76,83 @@ function createCard(item) {
   const card = document.createElement('article');
   card.className = 'recommendation-card';
 
-  const typeBadge = item.type === 'movie' ? 'Movie' : 'TV Show';
-  const ratingStars = getRatingDisplay(item.rating);
+  // Create card header
+  const cardHeader = document.createElement('div');
+  cardHeader.className = 'card-header';
 
-  card.innerHTML = `
-    <div class="card-header">
-      <h3>${item.title}</h3>
-      <span class="type-badge">${typeBadge}</span>
-    </div>
-    <div class="card-body">
-      <p class="genre"><strong>Genre:</strong> ${item.genre}</p>
-      <p class="length"><strong>Length:</strong> ${item.lengthMinutes} min</p>
-      <p class="rating"><strong>Rating:</strong> ${ratingStars} (${item.rating}/5)</p>
-      <p class="description">${item.description}</p>
-      <p class="streaming"><strong>Streaming on:</strong> ${item.streamingOn}</p>
-      <p class="year"><strong>Year:</strong> ${item.year}</p>
-    </div>
-  `;
+  const title = document.createElement('h3');
+  title.textContent = item.title;
+
+  const typeBadge = document.createElement('span');
+  typeBadge.className = 'type-badge';
+  typeBadge.textContent = item.type === 'movie' ? 'Movie' : 'TV Show';
+
+  cardHeader.appendChild(title);
+  cardHeader.appendChild(typeBadge);
+
+  // Create card body
+  const cardBody = document.createElement('div');
+  cardBody.className = 'card-body';
+
+  // Genre
+  const genre = document.createElement('p');
+  genre.className = 'genre';
+  const genreLabel = document.createElement('strong');
+  genreLabel.textContent = 'Genre: ';
+  genre.appendChild(genreLabel);
+  genre.appendChild(document.createTextNode(item.genre));
+
+  // Length
+  const length = document.createElement('p');
+  length.className = 'length';
+  const lengthLabel = document.createElement('strong');
+  lengthLabel.textContent = 'Length: ';
+  length.appendChild(lengthLabel);
+  length.appendChild(document.createTextNode(`${item.lengthMinutes} min`));
+
+  // Rating
+  const rating = document.createElement('p');
+  rating.className = 'rating';
+  const ratingLabel = document.createElement('strong');
+  ratingLabel.textContent = 'Rating: ';
+  const ratingStars = getRatingDisplay(item.rating);
+  rating.appendChild(ratingLabel);
+  rating.appendChild(
+    document.createTextNode(`${ratingStars} (${item.rating}/5)`)
+  );
+
+  // Description
+  const description = document.createElement('p');
+  description.className = 'description';
+  description.textContent = item.description;
+
+  // Streaming
+  const streaming = document.createElement('p');
+  streaming.className = 'streaming';
+  const streamingLabel = document.createElement('strong');
+  streamingLabel.textContent = 'Streaming on: ';
+  streaming.appendChild(streamingLabel);
+  streaming.appendChild(document.createTextNode(item.streamingOn));
+
+  // Year
+  const year = document.createElement('p');
+  year.className = 'year';
+  const yearLabel = document.createElement('strong');
+  yearLabel.textContent = 'Year: ';
+  year.appendChild(yearLabel);
+  year.appendChild(document.createTextNode(item.year));
+
+  // Append all to card body
+  cardBody.appendChild(genre);
+  cardBody.appendChild(length);
+  cardBody.appendChild(rating);
+  cardBody.appendChild(description);
+  cardBody.appendChild(streaming);
+  cardBody.appendChild(year);
+
+  // Append header and body to card
+  card.appendChild(cardHeader);
+  card.appendChild(cardBody);
 
   return card;
 }
