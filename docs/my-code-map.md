@@ -10,12 +10,12 @@ For each file, write one sentence about what it does.
 
 | File                    | What it does |
 | ----------------------- | ------------ |
-| `src/js/app.js`         |              |
-| `src/js/matching.js`    |              |
-| `src/js/data.js`        |              |
-| `src/js/experiments.js` |              |
-| `src/css/style.css`     |              |
-| `index.html`            |              |
+| `src/js/app.js`         | Connects the form to the data, grabs user inputs, finds matches, and creates the cards that show results.                 |
+| `src/js/matching.js`    | Has all the filtering functions that check if a movie or show matches what the user wants.                          |
+| `src/js/data.js`        | Just the dataset -15 movies and TV shows with their info             |
+| `src/js/experiments.js` | Practice file where I testes DOM methods like changing text and toggling classes.                                 |
+| `src/css/style.css`     | Makes the layout of the site-colors, layout, as well as spacing. |
+| `index.html`            | The page itself-has the form at the top and a container where results appear.                                  |
 
 ---
 
@@ -23,14 +23,14 @@ For each file, write one sentence about what it does.
 
 Look at your `index.html` and find the form element.
 
-- Form ID: `#___________`
+- Form ID: `#preferences-form`
 - Select element ID: `#___________`
 
 - What moods/options are in the select?
 
-  -
-  -
-  -
+  - Action
+  - Comedy
+  - Thriller
 
 ---
 

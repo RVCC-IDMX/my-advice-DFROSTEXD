@@ -68,3 +68,8 @@ src/css/style.css    ← all styles
 - Always use `querySelector` or `querySelectorAll` — never use `getElementById`, `getElementsByClassName`, or other legacy DOM methods
 - Never use `innerHTML` with data that could come from user input — use `createElement` + `textContent` + `appendChild` instead
 - When building DOM elements, be explicit about the structure you're creating rather than using template strings
+- Use `addEventListener()` to attach events, never use `onclick` or other `on*` HTML attributes
+- Use `for...of` loops instead of C-style `for` loops or `.forEach()` when iterating over arrays
+- Use `.append()` instead of `.appendChild()` for adding elements to the DOM
+- Use `.includes()` instead of `.indexOf() !== -1` when checking array membership
+- Use `classList.toggle()` to switch classes on and off, not manual add/remove logic
