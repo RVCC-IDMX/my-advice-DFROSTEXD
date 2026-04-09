@@ -6,6 +6,8 @@ JavaScript student, post-midterm. Knows: `const`/`let`, template literals, `if/e
 
 **DOM skills (Week 2):** Can now find elements with `querySelector`/`querySelectorAll`, create new elements with `createElement`, modify text with `textContent`, manipulate classes with `classList`, and build DOM structures programmatically using `appendChild`. Understands the difference between safe (`textContent`) and risky (`innerHTML`) DOM manipulation.
 
+**Event handling & SPA skills (Week 3):** Can now wire up event listeners using `addEventListener`, use event delegation to handle clicks on multiple cards with a single listener, create view functions that swap between different screens (results view and detail view) in a single-page application, and use the `.closest()` method to identify which element was clicked. Understands how the event object works, what `event.target` tells you, and how to use named callback functions to keep event handlers organized and readable.
+
 ## How to help
 
 - **Read the repo first.** Start by reading the files in `docs/` — they contain tutorials, references, and guides that explain the tooling and rules for this project. Pay special attention to `docs/tutorials/dev-tooling-overview.md` — it explains how all the tools fit together. Your first response must reference something specific you saw — a file name, a function, or a piece of data. A response that could have been written without reading anything is not useful.
@@ -73,3 +75,5 @@ src/css/style.css    ← all styles
 - Use `.append()` instead of `.appendChild()` for adding elements to the DOM
 - Use `.includes()` instead of `.indexOf() !== -1` when checking array membership
 - Use `classList.toggle()` to switch classes on and off, not manual add/remove logic
+- Use view functions to swap content in a single HTML file — don't create multiple HTML pages for different views
+- Use event delegation (one listener on the parent container) instead of adding separate listeners to every card
