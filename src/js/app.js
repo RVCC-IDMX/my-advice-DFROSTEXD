@@ -10,6 +10,16 @@ import { meetsAllCriteria, getRatingDisplay } from './matching.js';
 const form = document.querySelector('#preferences-form');
 const resultsContainer = document.querySelector('#results-container');
 
+// Dark mode toggle feature
+const toggleButton = document.createElement('button');
+toggleButton.textContent = 'Toggle Dark Mode';
+toggleButton.className = 'dark-mode-toggle';
+document.body.append(toggleButton);
+
+toggleButton.addEventListener('click', () => {
+  document.body.classList.toggle('dark-mode');
+});
+
 /**
  * Handle form submission
  * @param {Event} event - The form submit event
