@@ -24,7 +24,7 @@ For each file, write one sentence about what it does.
 Look at your `index.html` and find the form element.
 
 - Form ID: `#preferences-form`
-- Select element ID: `#___________`
+- Select element ID: `#genre-select`
 
 - What moods/options are in the select?
 
@@ -38,8 +38,8 @@ Look at your `index.html` and find the form element.
 
 Where do results appear on the page?
 
-- Container ID or class: `___________`
-- What element type is it? (`div`, `section`, etc.): `___________`
+- Container ID or class: `#results-container`
+- What element type is it? (`div`, `section`, etc.): `div`
 
 ---
 
@@ -47,11 +47,11 @@ Where do results appear on the page?
 
 Look at how your app.js builds each result card. What elements make up one card?
 
-- Card element type: `___________`
-- Card class name: `___________`
+- Card element type: `article`
+- Card class name: `.recommendation-card`
 
 - What is inside each card? (list the child elements and what data they show)
-  -
+  - Inside each card: A header section with the title and a badge showing if it's a movie or TV show, then a body with all the details like genre, length, star rating, description, where to stream it, and the year.
 
 ---
 
@@ -61,7 +61,7 @@ Look through your app.js for any `addEventListener` calls. List each one.
 
 | Where in the code | Event type | What it does |
 | ----------------- | ---------- | ------------ |
-|                   |            |              |
+|app.js, line 162   |  submit    |process and display results|
 
 If you do not see any `addEventListener` calls, write "none found" — and then look again, because the form handler uses one.
 
@@ -71,13 +71,18 @@ If you do not see any `addEventListener` calls, write "none found" — and then 
 
 Open `src/js/data.js` and look at one item in your dataset.
 
-- How many items total? `___`
+- How many items total? `15`
 
 - Properties on each item
 
-  -
-  -
-  -
+  - title
+  - type
+  - genre
+  - lengthMinutes
+  - rating
+  - description
+  - year
+  - streamingOn
 
 ---
 
