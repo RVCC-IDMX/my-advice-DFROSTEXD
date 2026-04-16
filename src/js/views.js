@@ -69,6 +69,15 @@ export function showDetail(item, container) {
 
   titleSection.append(title, typeBadge);
 
+  // Poster image (if available)
+  if (item.posterUrl) {
+    const poster = document.createElement('img');
+    poster.src = item.posterUrl;
+    poster.alt = `${item.title} poster`;
+    poster.className = 'detail-poster';
+    detailView.append(poster);
+  }
+
   // Create details section
   const detailsSection = document.createElement('div');
   detailsSection.className = 'detail-info';
@@ -153,6 +162,15 @@ function createCard(item) {
   // Create card body
   const cardBody = document.createElement('div');
   cardBody.className = 'card-body';
+
+  // Poster image (if available)
+  if (item.posterUrl) {
+    const poster = document.createElement('img');
+    poster.src = item.posterUrl;
+    poster.alt = `${item.title} poster`;
+    poster.className = 'poster';
+    cardBody.append(poster);
+  }
 
   // Genre
   const genre = document.createElement('p');

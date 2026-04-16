@@ -13,6 +13,50 @@ const resultsContainer = document.querySelector('#results-container');
 // Store last results so we can restore them when returning from detail view
 let lastResults = [];
 
+// Cache key for localStorage
+const CACHE_KEY = 'tmdb-movies-cache';
+
+/**
+ * Load cached movie data from localStorage
+ * @returns {Array|null} Cached movie data or null if not found/invalid
+ */
+function loadCache() {
+  try {
+    const saved = localStorage.getItem(CACHE_KEY);
+    if (!saved) return null;
+    const parsed = JSON.parse(saved);
+
+    // Validate that it's an array and has the expected shape
+    if (!Array.isArray(parsed)) {
+      localStorage.removeItem(CACHE_KEY);
+      return null;
+    }
+
+    // Check first item has expected properties
+    if (parsed.length > 0 && !parsed[0].title) {
+      localStorage.removeItem(CACHE_KEY);
+      return null;
+    }
+
+    return parsed;
+  } catch {
+    localStorage.removeItem(CACHE_KEY);
+    return null;
+  }
+}
+
+/**
+ * Save movie data to localStorage cache
+ * @param {Array} data - Movie data to cache
+ */
+function saveCache(data) {
+  try {
+    localStorage.setItem(CACHE_KEY, JSON.stringify(data));
+  } catch {
+    // Quota exceeded or private browsing - safe to ignore
+  }
+}
+
 // Dark mode toggle feature
 const toggleButton = document.createElement('button');
 toggleButton.textContent = 'Toggle Dark Mode';
@@ -28,6 +72,15 @@ toggleButton.addEventListener('click', () => {
  * @returns {Promise<Array>} Array of movie objects
  */
 async function fetchMovies() {
+  // Check cache first
+  const cached = loadCache();
+  if (cached) {
+    console.log('Loading from cache');
+    return cached;
+  }
+
+  // No cache - fetch from API
+  console.log('Fetching from API');
   try {
     const response = await fetch('/.netlify/functions/api');
 
@@ -36,6 +89,10 @@ async function fetchMovies() {
     }
 
     const data = await response.json();
+
+    // Save to cache for next time
+    saveCache(data);
+
     return data;
   } catch (error) {
     console.error('Failed to fetch movies:', error);
