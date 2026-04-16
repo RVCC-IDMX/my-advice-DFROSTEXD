@@ -3,7 +3,6 @@
  * This file wires together the data and matching logic with the user interface
  */
 
-import { mediaData } from './data.js';
 import { meetsAllCriteria } from './matching.js';
 import { showResults, showNoResults, showDetail } from './views.js';
 
@@ -25,37 +24,93 @@ toggleButton.addEventListener('click', () => {
 });
 
 /**
+ * Fetch movie data from serverless function
+ * @returns {Promise<Array>} Array of movie objects
+ */
+async function fetchMovies() {
+  try {
+    const response = await fetch('/.netlify/functions/api');
+
+    if (!response.ok) {
+      throw new Error(`API request failed with status ${response.status}`);
+    }
+
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error('Failed to fetch movies:', error);
+    throw error;
+  }
+}
+
+/**
+ * Show loading message in the results container
+ */
+function showLoading() {
+  resultsContainer.textContent = '';
+  const loadingMessage = document.createElement('p');
+  loadingMessage.className = 'loading';
+  loadingMessage.textContent = 'Loading movies...';
+  resultsContainer.append(loadingMessage);
+}
+
+/**
+ * Show error message in the results container
+ * @param {string} message - Error message to display
+ */
+function showError(message) {
+  resultsContainer.textContent = '';
+  const errorMessage = document.createElement('p');
+  errorMessage.className = 'error';
+  errorMessage.textContent =
+    message || 'Failed to load movies. Please try again.';
+  resultsContainer.append(errorMessage);
+}
+
+/**
  * Handle form submission
  * @param {Event} event - The form submit event
  */
-function handleFormSubmit(event) {
+async function handleFormSubmit(event) {
   event.preventDefault();
 
-  // Collect user preferences from form
-  const genreSelect = document.querySelector('#genre-select');
-  const lengthSelect = document.querySelector('#length-select');
-  const ratingSelect = document.querySelector('#rating-select');
+  // Show loading state
+  showLoading();
 
-  const preferences = {
-    genre: genreSelect.value,
-    length: lengthSelect.value,
-    minRating: Number(ratingSelect.value),
-  };
+  try {
+    // Fetch data from serverless function
+    const movieData = await fetchMovies();
 
-  // Filter data using matching logic
-  const matches = [];
-  for (const item of mediaData) {
-    if (meetsAllCriteria(item, preferences)) {
-      matches.push(item);
+    // Collect user preferences from form
+    const genreSelect = document.querySelector('#genre-select');
+    const lengthSelect = document.querySelector('#length-select');
+    const ratingSelect = document.querySelector('#rating-select');
+
+    const preferences = {
+      genre: genreSelect.value,
+      length: lengthSelect.value,
+      minRating: Number(ratingSelect.value),
+    };
+
+    // Filter data using matching logic
+    const matches = [];
+    for (const item of movieData) {
+      if (meetsAllCriteria(item, preferences)) {
+        matches.push(item);
+      }
     }
-  }
 
-  // Display results using view functions
-  if (matches.length === 0) {
-    showNoResults(resultsContainer);
-  } else {
-    lastResults = matches; // Store results for back button
-    showResults(matches, resultsContainer);
+    // Display results using view functions
+    if (matches.length === 0) {
+      showNoResults(resultsContainer);
+    } else {
+      lastResults = matches; // Store results for back button
+      showResults(matches, resultsContainer);
+    }
+  } catch {
+    showError(
+      'Failed to load movies. Please check your connection and try again.'
+    );
   }
 }
 
@@ -74,8 +129,8 @@ function handleCardClick(event) {
   // Get the title from the card's data attribute
   const title = card.dataset.id;
 
-  // Find the matching item in the dataset
-  const item = mediaData.find((item) => item.title === title);
+  // Find the matching item in lastResults instead of mediaData
+  const item = lastResults.find((item) => item.title === title);
 
   // If we found the item, show its detail view
   if (item) {
