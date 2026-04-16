@@ -28,9 +28,14 @@ Look at your `index.html` and find the form element.
 
 - What moods/options are in the select?
 
+  - Any Genre
   - Action
   - Comedy
+  - Drama
+  - Sci-Fi
   - Thriller
+  - Animation
+  - Crime
 
 ---
 
@@ -61,7 +66,10 @@ Look through your app.js for any `addEventListener` calls. List each one.
 
 | Where in the code | Event type | What it does |
 | ----------------- | ---------- | ------------ |
-|app.js, line 162   |  submit    |process and display results|
+| app.js, line 66   | click      | Toggles dark mode on/off |
+| app.js, line 199  | click      | Back button to return to results view |
+| app.js, line 215  | submit     | Form submit to process and display results |
+| app.js, line 216  | click      | Card click delegation to show detail view |
 
 If you do not see any `addEventListener` calls, write "none found" — and then look again, because the form handler uses one.
 
@@ -90,7 +98,7 @@ Open `src/js/data.js` and look at one item in your dataset.
 
 Do you have a `.hidden` class or similar in your CSS? If so, what does it do?
 
-- Class name: `___________`
-- What CSS rule does it apply? `___________`
+- Class name: `None yet`
+- What CSS rule does it apply? `Will be created in Week 4 if needed for loading/error states`
 
 If you do not have one, you will create one this week.
