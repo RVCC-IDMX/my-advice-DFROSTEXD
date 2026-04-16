@@ -8,6 +8,8 @@ JavaScript student, post-midterm. Knows: `const`/`let`, template literals, `if/e
 
 **Event handling & SPA skills (Week 3):** Can now wire up event listeners using `addEventListener`, use event delegation to handle clicks on multiple cards with a single listener, create view functions that swap between different screens (results view and detail view) in a single-page application, and use the `.closest()` method to identify which element was clicked. Understands how the event object works, what `event.target` tells you, and how to use named callback functions to keep event handlers organized and readable.
 
+**Async/fetch & serverless skills (Week 4):** Can now use `async`/`await` to fetch data from APIs, write serverless functions that act as proxies, handle errors with `try`/`catch`, check `response.ok` before parsing JSON, cache data in localStorage with safe patterns, and validate data shapes. Understands the enforcement ladder (AGENTS.md → ESLint → git hooks) and why blocking `innerHTML` everywhere prevents XSS vulnerabilities.
+
 ## How to help
 
 - **Read the repo first.** Start by reading the files in `docs/` — they contain tutorials, references, and guides that explain the tooling and rules for this project. Pay special attention to `docs/tutorials/dev-tooling-overview.md` — it explains how all the tools fit together. Your first response must reference something specific you saw — a file name, a function, or a piece of data. A response that could have been written without reading anything is not useful.
@@ -22,9 +24,11 @@ JavaScript student, post-midterm. Knows: `const`/`let`, template literals, `if/e
 
 - ES modules only — `import`/`export`, never `require`
 - `const` by default; `let` only when reassignment needed; never `var`
-- `textContent` for user input in DOM; `innerHTML` only for hardcoded template literals
+- Never use `innerHTML` — it's blocked by the linter everywhere (XSS risk). Use `createElement` + `textContent` + `append` instead
 - No `eval()`; `console.log` is allowed for debugging during development
-- No `fetch()`, `async`, `await`, or Promises — all data must come from the local `data.js` array
+- Always use `async`/`await` for asynchronous operations — wrap in `try`/`catch` for error handling
+- Always check `response.ok` before calling `response.json()` on fetch responses
+- Validate data shapes from localStorage and APIs — never trust external data
 - Logic functions (filtering, matching, data) must not touch the DOM — keep them testable
 
 ### HTML
