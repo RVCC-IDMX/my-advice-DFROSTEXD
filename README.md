@@ -13,6 +13,16 @@ npm run dev
 
 After `npm install`, Husky sets up pre-commit hooks automatically. Running `npm run dev` starts the Vite dev server — you should see a placeholder page in the browser.
 
+## Local development
+
+This project uses the TMDB (The Movie Database) API to fetch live movie data. You need an API key to run it locally:
+
+1. Get a free API key at [TMDB](https://www.themoviedb.org/settings/api)
+2. Copy `.env.example` to `.env` in the project root
+3. Add your key: `TMDB_API_KEY=your-key-here`
+
+**For the deployed site:** The same `TMDB_API_KEY` environment variable must be set in Netlify under Site configuration → Environment variables. Without it, the serverless function will return a 500 error.
+
 ## Learning objectives
 
 - Set up and work inside a professional JavaScript tooling harness
