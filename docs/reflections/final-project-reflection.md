@@ -6,6 +6,8 @@ Write 2–3 sentences for each prompt. The reflection is where the learning gets
 
 Which pattern did you pick — A, B, or A+B? Why? If you considered one and rejected it, name what made it not the right fit for _your_ project.
 
+I picked pattern A. I picked it because 
+
 ## 2. The hardest part
 
 What was the hardest part of integrating Groq into your Week 4 architecture? Was it the prompt design, the schema shape, the front-end refusal handling, the latency, the cost, the unfamiliar SDK, or something else?
