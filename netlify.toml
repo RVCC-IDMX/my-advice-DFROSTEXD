@@ -19,3 +19,7 @@
 # Pin the Node.js version so the build behaves the same as your local machine.
 [build.environment]
   NODE_VERSION = "20"
+
+# Tell Netlify where serverless functions are located
+[functions]
+  directory = "netlify/functions"
