@@ -15,13 +15,60 @@ After `npm install`, Husky sets up pre-commit hooks automatically. Running `npm 
 
 ## Local development
 
-This project uses the TMDB (The Movie Database) API to fetch live movie data. You need an API key to run it locally:
+This project uses **Groq AI** for natural language movie search and **TMDB (The Movie Database)** API to fetch live movie data. You need both API keys to run it locally:
 
-1. Get a free API key at [TMDB](https://www.themoviedb.org/settings/api)
-2. Copy `.env.example` to `.env` in the project root
-3. Add your key: `TMDB_API_KEY=your-key-here`
+### Getting API Keys
 
-**For the deployed site:** The same `TMDB_API_KEY` environment variable must be set in Netlify under Site configuration → Environment variables. Without it, the serverless function will return a 500 error.
+1. **TMDB API Key**
+   - Get a free API key at [TMDB](https://www.themoviedb.org/settings/api)
+   - Used to fetch movie data from TMDB's discover endpoint
+
+2. **Groq API Key**
+   - Sign up at [Groq Console](https://console.groq.com/)
+   - Create an API key in the dashboard
+   - Used to translate natural language queries into TMDB search parameters
+
+### Local Setup
+
+1. Create a `.env.local` file in the project root (this file is gitignored)
+2. Add both keys:
+
+   ```bash
+   TMDB_API_KEY=your-tmdb-key-here
+   GROQ_API_KEY=your-groq-key-here
+   ```
+
+### Deployment Setup
+
+**For the deployed site on Netlify:** Both `TMDB_API_KEY` and `GROQ_API_KEY` environment variables must be set in Netlify:
+
+1. Go to Site configuration → Environment variables
+2. Add both keys as **secrets** (recommended)
+3. Set them for all deploy contexts (Production, Deploy Previews, Branch deploys)
+
+Without these keys, the serverless function will return errors.
+
+## How It Works (Pattern A Architecture)
+
+This project uses **Pattern A** from the Final Project:
+
+1. **User types free text** in a textarea (e.g., "funny 90s comedies under 100 minutes")
+2. **Groq AI translates** the text into TMDB API parameters using the llama-3.1-8b-instant model
+3. **Serverless function fetches** movies from TMDB using the translated parameters
+4. **Results display** as movie cards with posters, genres, ratings, and runtime
+
+### Security Layers
+
+The serverless function implements **4 security layers** to prevent prompt injection and abuse:
+
+1. **System prompt** — Defines Groq's role, output schema, and forbids following user instructions
+2. **JSON mode** — Forces structured output (`response_format: {type: "json_object"}`)
+3. **Delimited input** — User text is wrapped in `<user_input>` tags and treated as data, not instructions
+4. **Input length cap** — Requests over 500 characters are rejected before reaching Groq
+
+### Refusal Handling
+
+If Groq determines a request is not about movies (e.g., "tell me a joke"), it returns a refusal response with an explanation. The UI displays a styled message with helpful examples.
 
 ## Learning objectives
 
