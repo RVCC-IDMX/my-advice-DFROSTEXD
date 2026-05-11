@@ -6,7 +6,7 @@ Write 2–3 sentences for each prompt. The reflection is where the learning gets
 
 Which pattern did you pick — A, B, or A+B? Why? If you considered one and rejected it, name what made it not the right fit for _your_ project.
 
-I picked pattern A because my project takes free-text user input ('funny 90s comedies') and needs to translate it into specific TMDB API parameters (genre IDs, year ranges, ratings). Pattern B wouldn't fit since I'm not generating natural language output — I'm fetching and displaying structured movie data from TMDB. 
+I picked pattern A because my project takes free-text user input and needs to translate it into specific TMDB API parameters (genre IDs, year ranges, ratings). Pattern B wouldn't fit since I'm not generating natural language output, I'm fetching and displaying structured movie data from TMDB. 
 
 ## 2. The hardest part
 
