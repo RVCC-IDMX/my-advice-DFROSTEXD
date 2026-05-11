@@ -1,9 +1,8 @@
 /**
  * Main application logic - handles form submission and DOM manipulation
- * This file wires together the data and matching logic with the user interface
+ * This file wires together the Groq AI translation with TMDB movie data
  */
 
-import { meetsAllCriteria } from './matching.js';
 import { showResults, showNoResults, showDetail } from './views.js';
 
 // Get form and results container
@@ -12,50 +11,6 @@ const resultsContainer = document.querySelector('#results-container');
 
 // Store last results so we can restore them when returning from detail view
 let lastResults = [];
-
-// Cache key for localStorage
-const CACHE_KEY = 'tmdb-movies-cache';
-
-/**
- * Load cached movie data from localStorage
- * @returns {Array|null} Cached movie data or null if not found/invalid
- */
-function loadCache() {
-  try {
-    const saved = localStorage.getItem(CACHE_KEY);
-    if (!saved) return null;
-    const parsed = JSON.parse(saved);
-
-    // Validate that it's an array and has the expected shape
-    if (!Array.isArray(parsed)) {
-      localStorage.removeItem(CACHE_KEY);
-      return null;
-    }
-
-    // Check first item has expected properties
-    if (parsed.length > 0 && !parsed[0].title) {
-      localStorage.removeItem(CACHE_KEY);
-      return null;
-    }
-
-    return parsed;
-  } catch {
-    localStorage.removeItem(CACHE_KEY);
-    return null;
-  }
-}
-
-/**
- * Save movie data to localStorage cache
- * @param {Array} data - Movie data to cache
- */
-function saveCache(data) {
-  try {
-    localStorage.setItem(CACHE_KEY, JSON.stringify(data));
-  } catch {
-    // Quota exceeded or private browsing - safe to ignore
-  }
-}
 
 // Dark mode toggle feature
 const toggleButton = document.createElement('button');
@@ -68,36 +23,25 @@ toggleButton.addEventListener('click', () => {
 });
 
 /**
- * Fetch movie data from serverless function
- * @returns {Promise<Array>} Array of movie objects
+ * Fetch movie data from serverless function with user's text input
+ * @param {string} userInput - The user's natural language movie request
+ * @returns {Promise<Object>} Response object with movies or refusal
  */
-async function fetchMovies() {
-  // Check cache first
-  const cached = loadCache();
-  if (cached) {
-    console.log('Loading from cache');
-    return cached;
+async function fetchMovies(userInput) {
+  const response = await fetch('/.netlify/functions/api', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'text/plain',
+    },
+    body: userInput,
+  });
+
+  if (!response.ok) {
+    throw new Error(`API request failed with status ${response.status}`);
   }
 
-  // No cache - fetch from API
-  console.log('Fetching from API');
-  try {
-    const response = await fetch('/.netlify/functions/api');
-
-    if (!response.ok) {
-      throw new Error(`API request failed with status ${response.status}`);
-    }
-
-    const data = await response.json();
-
-    // Save to cache for next time
-    saveCache(data);
-
-    return data;
-  } catch (error) {
-    console.error('Failed to fetch movies:', error);
-    throw error;
-  }
+  const data = await response.json();
+  return data;
 }
 
 /**
@@ -125,6 +69,31 @@ function showError(message) {
 }
 
 /**
+ * Show refusal message when Groq can't process the request
+ * @param {string} reason - Refusal reason from Groq
+ */
+function showRefusal(reason) {
+  resultsContainer.textContent = '';
+  const refusalMessage = document.createElement('div');
+  refusalMessage.className = 'refusal';
+
+  const heading = document.createElement('h3');
+  heading.textContent = "🤔 Hmm, I couldn't process that request";
+
+  const message = document.createElement('p');
+  message.textContent =
+    reason || "Please try describing a movie you'd like to watch.";
+
+  const hint = document.createElement('p');
+  hint.className = 'hint';
+  hint.textContent =
+    'Try: "funny 90s comedies" or "intense sci-fi thrillers from the 2000s"';
+
+  refusalMessage.append(heading, message, hint);
+  resultsContainer.append(refusalMessage);
+}
+
+/**
  * Handle form submission
  * @param {Event} event - The form submit event
  */
@@ -135,35 +104,33 @@ async function handleFormSubmit(event) {
   showLoading();
 
   try {
-    // Fetch data from serverless function
-    const movieData = await fetchMovies();
+    // Get user's text input
+    const textarea = document.querySelector('#movie-request');
+    const userInput = textarea.value.trim();
 
-    // Collect user preferences from form
-    const genreSelect = document.querySelector('#genre-select');
-    const lengthSelect = document.querySelector('#length-select');
-    const ratingSelect = document.querySelector('#rating-select');
-
-    const preferences = {
-      genre: genreSelect.value,
-      length: lengthSelect.value,
-      minRating: Number(ratingSelect.value),
-    };
-
-    // Filter data using matching logic
-    const matches = [];
-    for (const item of movieData) {
-      if (meetsAllCriteria(item, preferences)) {
-        matches.push(item);
-      }
+    if (!userInput) {
+      showError('Please describe what you want to watch.');
+      return;
     }
 
-    // Display results using view functions
-    if (matches.length === 0) {
+    // Fetch from serverless function (Groq + TMDB)
+    const response = await fetchMovies(userInput);
+
+    // Handle refusal (Groq couldn't process the request)
+    if (response.refused) {
+      showRefusal(response.refusal_reason);
+      return;
+    }
+
+    // Handle no results
+    if (!response || response.length === 0) {
       showNoResults(resultsContainer);
-    } else {
-      lastResults = matches; // Store results for back button
-      showResults(matches, resultsContainer);
+      return;
     }
+
+    // Store and display results
+    lastResults = response;
+    showResults(response, resultsContainer);
   } catch {
     showError(
       'Failed to load movies. Please check your connection and try again.'
