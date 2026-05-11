@@ -250,6 +250,34 @@ button[type='submit']:focus {
   box-shadow: var(--box-shadow);
 }
 
+.refusal {
+  text-align: center;
+  padding: var(--spacing-xl);
+  background-color: hsl(45, 100%, 97%);
+  border: 2px solid hsl(45, 80%, 75%);
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow);
+}
+
+.refusal h3 {
+  color: hsl(30, 70%, 40%);
+  font-size: 1.5rem;
+  margin-bottom: var(--spacing-sm);
+}
+
+.refusal p {
+  color: var(--color-text);
+  font-size: 1.125rem;
+  margin-bottom: var(--spacing-sm);
+}
+
+.refusal .hint {
+  color: var(--color-text-muted);
+  font-size: 1rem;
+  font-style: italic;
+  margin-top: var(--spacing-md);
+}
+
 /* Mobile-first — add min-width queries as needed */
 
 /* Tablet: 2 columns */
@@ -305,4 +333,24 @@ button[type='submit']:focus {
 
 .label-badge {
   font-size: 0.9em;
+}
+
+/* Dark mode */
+body.dark-mode {
+  --color-bg-light: hsl(220, 15%, 15%);
+  --color-surface: hsl(220, 15%, 20%);
+  --color-text: hsl(220, 20%, 90%);
+  --color-text-muted: hsl(220, 10%, 65%);
+  --color-border: hsl(220, 15%, 30%);
+  --box-shadow: 0 2px 8px hsla(0, 0%, 0%, 0.3);
+  --box-shadow-hover: 0 4px 16px hsla(0, 0%, 0%, 0.4);
+}
+
+body.dark-mode .refusal {
+  background-color: hsl(45, 30%, 25%);
+  border-color: hsl(45, 40%, 40%);
+}
+
+body.dark-mode .refusal h3 {
+  color: hsl(45, 80%, 70%);
 }
